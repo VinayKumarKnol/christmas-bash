@@ -2,22 +2,27 @@
 
 #COLORS_GLOBAL
 GREEN='\e[0;32m'
+BROWN='\e[0;33m'
 NC='\e[0m'
-
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
+BLINK=$(tput blink)
+SURPRISE=$()
 #What type of tree do ya need?
 row=19
 line=1
 pillar=$(($(tput cols)/2))
 lights=5
 
+
 #Put some lights on the tree please
 function putSomeLightsLeaves(){
   if [[ $(($RANDOM % $1)) == 1 ]]
   then
      #tput cup $2 $(($3 - 1))
-     echo -n "o";
+     echo -ne "${BOLD}${BLINK}$(tput setaf $((($RANDOM + 1) % 8)))o${NORMAL}"
   else
-     echo -n "*";
+    echo -ne "${GREEN}${BOLD}*${NORMAL}${NC}"
   fi
 }
 
@@ -31,8 +36,9 @@ function buyMeATree()
    tput cup $lines $((pillars - 1))
    for (( j=0; j<=i; j++ ));
    do
-     #Put some leaves or lights there!
-     putSomeLightsLeaves $lights
+     echo -ne "${GREEN}${BOLD}*${NORMAL}${NC}"
+      #Put some leaves or lights there!
+      #putSomeLightsLeaves $lights
    done
    ((lines++));
    ((pillars--));
@@ -50,24 +56,28 @@ function dontMissTheTrunk()
   for (( i=0; i<=2; i++ ));
   do
    tput cup $lines $((pillars - 2))
-   echo -n "uWu"
+   echo -ne "${BROWN}${BOLD}uWu${NORMAL}${NC}"
    ((lines++));
   done
+  echo 
   #reassign shared variables.
   line=$lines
 }
 
+#function decorateMyTree(){
+#  
+#}
+
 #Clean the Corner honey!
 tput clear
-
+tput civis
 #Buy Me A Tree
-buyMeATree $row $line $pillar
-
+buyMeATree $row $line $pillar 
 #Where'd the trunk go dad?
 pillar=$(($(tput cols)/2))
 dontMissTheTrunk $line $pillar
-
 ##Put lights on my tree please?
+tput cnorm
 
 
 
