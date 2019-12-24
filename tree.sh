@@ -64,20 +64,54 @@ function dontMissTheTrunk()
   line=$lines
 }
 
-#function decorateMyTree(){
-#  
-#}
+function decorateMyTree(){
+ #get center of the screen
+ #arg1 = light
+ #
+  local lines=$2
+  local pillars=$3
+  for (( i=0; i<=$1; i+=2 ));
+  do
+   tput cup $lines $((pillars - 1))
+   for (( j=1; j<=i; j++ ));
+   do
+     putSomeLightsLeaves $lights
+      #Put some leaves or lights there!
+      #putSomeLightsLeaves $lights
+   done
+   ((lines++));
+   ((pillars--));
+  done
+}
 
+function cleanTheMess() {
+  ##Handler for the ctrl+C 
+ tput sgr0;
+ tput cnorm;
+ tput clear;
+ echo ByeBye;
+ exit;
+  
+}
 #Clean the Corner honey!
 tput clear
 tput civis
+trap cleanTheMess INT
 #Buy Me A Tree
 buyMeATree $row $line $pillar 
 #Where'd the trunk go dad?
 pillar=$(($(tput cols)/2))
 dontMissTheTrunk $line $pillar
 ##Put lights on my tree please?
-tput cnorm
+row=19
+line=1
+pillar=$(($(tput cols)/2))
+while true; 
+do
+  decorateMyTree $row $line $pillar
+  sleep 1
+done
+
 
 
 
