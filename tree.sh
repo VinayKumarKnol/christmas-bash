@@ -3,6 +3,7 @@
 #COLORS_GLOBAL
 GREEN='\e[0;32m'
 BROWN='\e[0;33m'
+RED='\e[0;31m'
 NC='\e[0m'
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
@@ -13,6 +14,7 @@ row=19
 line=1
 pillar=$(($(tput cols)/2))
 lights=5
+new_year=
 
 
 #Put some lights on the tree please
@@ -24,6 +26,26 @@ function putSomeLightsLeaves(){
   else
     echo -ne "${GREEN}${BOLD}*${NORMAL}${NC}"
   fi
+}
+
+function text_at_the_bottom() {
+ #Called after the trunk is setup.
+ #use line variable for next line
+ #use cols/3
+ lines=$(($1 + 1 ))
+ columns=$(($(tput cols) / 3))
+ columns=$(($columns + 10))
+ tput cup $lines $columns; echo -ne "${RED}${BOLD}Merry Christmas and Happy${NORMAL}${NC}";
+ columns=$(($columns + 26))
+ for char in C O D I N G
+ do
+    tput cup $lines $columns; echo -ne "${BOLD}$(tput setaf $((($RANDOM + 3) % 8)))$char${NORMAL}"
+    columns=$(($columns + 1))
+    sleep 0.3
+ done
+ columns=$(($(tput cols) / 3))
+ lines=$(($lines + 1))
+ tput cup $lines $(($columns+12)); echo -ne "${RED}${BOLD} let's Welcome $(($(date +%Y)+ 1)) !! ${NORMAL}${NC}"       
 }
 
 function buyMeATree()
@@ -109,6 +131,7 @@ pillar=$(($(tput cols)/2))
 while true; 
 do
   decorateMyTree $row $line $pillar
+  text_at_the_bottom 13 
   sleep 1
 done
 
